@@ -235,7 +235,7 @@ Here's an example of an input element with both change and focus handlers.
 data Action = Changed String | Focused
 
 inputWidget :: Widget HTML Action
-inputWidget = input [(Changed <<< unsafeTargetValue) <$> onChange, Focused <$ onFocus]
+inputWidget = input [(Changed <<< unsafeTargetValue) <$> onChange, Focused <$ onFocus] []
 ```
 (The `unsafeTargetValue` is equivalent to `event.target.value` in Javascript. It's literally defined as `(unsafeCoerce e).target.value`. It's "unsafe" because it can't statically guarantee that the onChange handler has been called on a target with a value. We are considering implementing a better more-typesafe API for getting the target value.)
 
@@ -247,8 +247,7 @@ You don't need an action data type if you decide to process the action in line. 
 type State = {focusCount:: Int, currentText :: String}
 
 inputWidget :: State -> Widget HTML State
-inputWidget st = input [st {focusCount = st.focusCount+1} <$ onFocus
-                       , ((\s -> st {currentText = s}) <<< unsafeTargetValue) <$> onChange]
+inputWidget st = input [st {focusCount = st.focusCount+1} <$ onFocus, ((\s -> st {currentText = s}) <<< unsafeTargetValue) <$> onChange] []
 ```
 
 Now `inputWidget` will return the new application state whenever the text is changed or whenever it receives focus.
@@ -276,7 +275,7 @@ Including a formal notion of a widget lifecycle, and a return type, has distinct
 -- A counter widget takes the initial count as argument, and returns the updated count
 counter :: Int -> Widget HTML Int
 counter count = do
-  button [onClick] [text (show count)]
+  void $ button [onClick] [text (show count)]
   pure (count + 1)
 ```
 
@@ -285,8 +284,8 @@ You can compose an entire list of them easily on a webpage. The return value of 
 ```purescript
 -- Compose a list of counters in parallel
 -- The return value is the value of the counter which is clicked
-listCounters :: [Int] -> Widget HTML Int
-listCounter = orr <<< map counter
+listCounters :: Array Int -> Widget HTML Int
+listCounters = orr <<< map counter
 ```
 
 Now if we want to distinguish which counter was updated, we can use the `Functor` instance of Widgets to tag the return type. Widgets are also `Applicative` (and as we have already seen, `Monad`). These instances, allow a natural handling of return values using `<$>`, `<*>`, `<$`, monadic do-notation, etc. So we can now return the updated count tagged with the index of the Counter which was clicked -
@@ -294,8 +293,8 @@ Now if we want to distinguish which counter was updated, we can use the `Functor
 ```purescript
 -- Compose a list of counters in parallel
 -- The return value is the value which was clicked together with its index.
-listCounters :: [Int] -> Widget HTML {count: Int, index: Int}
-listCounter initialCounts = orr (mapWithIndex mkCount initialCounts)
+listCounters :: Array Int -> Widget HTML {count: Int, index: Int}
+listCounters initialCounts = orr (mapWithIndex mkCount initialCounts)
   where mkCount index = map (\count -> {index, count}) <<< counter
 ```
 
@@ -305,8 +304,8 @@ Or even better, you can simply return the modified counts together as a list, so
 
 ```purescript
 -- Compose a list of counters in parallel
-listCounters :: [Int] -> Widget HTML [Int]
-listCounter initialCounts = orr (mapWithIndex (mkCount initialCounts) initialCounts)
+listCounters :: Array Int -> Widget HTML (Array Int)
+listCounters initialCounts = orr (mapWithIndex (mkCount initialCounts) initialCounts)
   where mkCount initialCountArray index initCount = map (\count -> fromMaybe initialCountArray (updateAt index count initialCountArray)) (counter initCount)
 ```
 
@@ -316,8 +315,8 @@ Of course, Concur also provides a better way to show multiple widgets in paralle
 
 ```purescript
 -- Compose a list of counters in parallel
-listCounters :: [Int] -> Widget HTML [Int]
-listCounter initialCounts = andd (map counter initialCounts)
+listCounters :: Array Int -> Widget HTML (Array Int)
+listCounters initialCounts = andd (map counter initialCounts)
 ```
 
 #### Input Output
@@ -402,7 +401,7 @@ This is surprisingly powerful and composable. Let's build a widget which allows 
 The program is literally two words long i.e. `traverse formWidget`.
 
 ```purescript
-multiFormWidget :: [Form] -> Widget HTML [Form]
+multiFormWidget :: Array Form -> Widget HTML (Array Form)
 multiFormWidget = traverse formWidget
 ```
 
@@ -411,7 +410,7 @@ Here, we use the fact that `Widget` also has an `Applicative` instance (along wi
 If instead you wanted to allow editing all the forms together, you would do -
 
 ```purescript
-multiFormWidget :: [Form] -> Widget HTML [Form]
+multiFormWidget :: Array Form -> Widget HTML (Array Form)
 multiFormWidget = andd <<< map formWidget
 ```
 
