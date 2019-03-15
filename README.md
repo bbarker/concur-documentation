@@ -475,7 +475,7 @@ hello = do
 As we discussed in the previous section, to make this widget composable and maintainable, we should separate the recursive call from the rest of the code. However there are two things that are unsatisfactory about that -
 
 1. The most straightforward way to write something is not the idiomatic way to write something. We have lost a property that Concur prides itself on.
-2. The complete behaviour of the widget includes the UI *and* the recursion. It feels unsatisfactory to *have to*** separate the two in order to be able to compose things.
+2. The complete behaviour of the widget includes the UI *and* the recursion. It feels unsatisfactory to *have to* separate the two in order to be able to compose things.
 
 **Enter Signals.**
 
