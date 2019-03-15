@@ -497,7 +497,7 @@ So how do we build signals? The workhorse for that is the function `hold`. It is
 hold :: forall v a. Monoid v => a -> Widget v a -> Signal v a
 ```
 
-Each Signal always has a value associated with it. It's a `Comonad`, so the current value of the Signal can be extracted with `extract`.
+Each Signal always has a value associated with it. It's a [Comonad](https://pursuit.purescript.org/packages/purescript-control/4.1.0/docs/Control.Comonad#t:Comonad), so the current value of the Signal can be extracted with `extract`.
 
 Hold takes the initial value of the signal as its first argument. The second argument is the Widget. This way of creating Signals requires recursion to be implemented in continuation passing style. The Widget passed in needs to perform some work, and then return the continuation Signal.
 
