@@ -455,7 +455,7 @@ app data = do
 
 #### Introduction
 
-Signals are a more recent addition to Concur, and relatively experimental. However, like everything else in Concur, a signal is basically one simple idea that goes a long way.
+[Signal](https://pursuit.purescript.org/packages/purescript-concur-react/0.3.4/docs/Concur.Core.FRP#t:Signal)s are a more recent addition to Concur, and relatively experimental. However, like everything else in Concur, a signal is basically one simple idea that goes a long way.
 
 To see why we need Signals, let's reconsider the greeting selector example from the previous section. We need to display a greeting selector, and then greet the user with that selected greeting, and finally allow the user to restart the cycle.
 
