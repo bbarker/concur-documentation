@@ -494,7 +494,7 @@ Here we ignore the return value of the Widget, since we can't make use of it in 
 So how do we build signals? The workhorse for that is the function `hold`. It is dual to `dyn`, in that it allows creating a Signal from a Widget.
 
 ```purescript
-hold :: forall v a. a -> Widget v (Signal v a) -> Signal v a
+hold :: forall v a. Monoid v => a -> Widget v a -> Signal v a
 ```
 
 Each Signal always has a value associated with it. It's a `Comonad`, so the current value of the Signal can be extracted with `extract`.
