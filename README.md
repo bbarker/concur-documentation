@@ -410,8 +410,8 @@ And then compose them together when needed.
 ```purescript
 hello :: forall a. Widget HTML a
 hello = do
-  greeting <- getgreeting
-  showgreeting greeting
+  greeting <- getGreeting
+  showGreeting greeting
   hello
 ```
 
@@ -424,8 +424,8 @@ hello :: String -> forall a. Widget HTML a
 hello prev = hello =<< div'
   [ text ("Previous greeting - " <> prev)
   , do
-      greeting <- getgreeting
-      showgreeting greeting
+      greeting <- getGreeting
+      showGreeting greeting
       pure greeting
   ]
 
