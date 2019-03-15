@@ -435,7 +435,7 @@ helloWithPrev = hello ""
 
 ### Composing Never-ending Widgets
 
-As the previous section showed, it's recommended to avoid creating widgets which never end, to allow arbitrary composition. However, at this point it must be pointed out that Concur does allow you to compose never-ending widgets in meaningful ways, *as long as you remember that a never ending-widget will only be a Consumer, and not a Producer of meaningful data*. **(PS: There are ways to get data out of a never ending widget as well. See remoteWidget for an example)**.
+As the previous section showed, it's recommended to avoid creating widgets which never end, to allow arbitrary composition. However, at this point it must be pointed out that Concur does allow you to compose never-ending widgets in meaningful ways, *as long as you remember that a never ending-widget will only be a Consumer, and not a Producer of meaningful data*. **(PS: There are ways to get data out of a never ending widget as well. See [remoteWidget](https://pursuit.purescript.org/packages/purescript-concur-react/0.3.4/docs/Concur.Core.Patterns#v:remoteWidget) for an example)**.
 
 Composing never ending widgets works because parent widgets completely control the child widgets, and can remove them from the view at will irrespective of whether the widget ended.
 
